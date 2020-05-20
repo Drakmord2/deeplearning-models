@@ -43,10 +43,11 @@ class DeepNeuralNetwork:
 
             # Print the cost every 100 training example
             if print_cost and i % 100 == 0:
-                print ("Cost after iteration %i: %f" % (i, cost))
+                print("Cost after iteration %i: %f" % (i, cost))
             if i % 100 == 0:
                 costs.append(cost)
 
+        np.save("./outputs/dnn-params.npy", parameters)
         self.parameters = parameters
         self.costs = costs
 
@@ -67,20 +68,25 @@ class DeepNeuralNetwork:
 
         return p
 
-    def relu(self, Z):
-        A = np.maximum(0, Z)
+    def load_params(self):
+        parameters = np.load("./outputs/dnn-params.npy", allow_pickle=True)
+
+        self.parameters = parameters.item()
+
+    def leaky_relu(self, Z):
+        A = np.maximum(Z, 0.01*Z)
 
         assert (A.shape == Z.shape)
 
         cache = Z
         return A, cache
 
-    def relu_derivative(self, dA, cache):
+    def leaky_relu_derivative(self, dA, cache):
         Z = cache
         dZ = np.array(dA, copy=True)  # just converting dz to a correct object.
 
         # When z <= 0, you should set dz to 0 as well.
-        dZ[Z <= 0] = 0
+        dZ[Z <= 0] = 0.01
 
         assert (dZ.shape == Z.shape)
 
@@ -107,7 +113,7 @@ class DeepNeuralNetwork:
         L = len(layer_dims)  # number of layers in the network
 
         for l in range(1, L):
-            parameters['W' + str(l)] = np.random.randn(layer_dims[l], layer_dims[l - 1]) / np.sqrt(layer_dims[l - 1])  # *0.01
+            parameters['W' + str(l)] = np.random.randn(layer_dims[l], layer_dims[l - 1]) * np.sqrt(2. / layer_dims[l - 1])
             parameters['b' + str(l)] = np.zeros((layer_dims[l], 1))
 
             assert (parameters['W' + str(l)].shape == (layer_dims[l], layer_dims[l - 1]))
@@ -132,7 +138,7 @@ class DeepNeuralNetwork:
         elif activation == "relu":
             # Inputs: "A_prev, W, b". Outputs: "A, activation_cache".
             Z, linear_cache = self.linear_forward(A_prev, W, b)
-            A, activation_cache = self.relu(Z)
+            A, activation_cache = self.leaky_relu(Z)
 
         assert (A.shape == (W.shape[0], A_prev.shape[1]))
         cache = (linear_cache, activation_cache)
@@ -161,6 +167,12 @@ class DeepNeuralNetwork:
     def compute_cost(self, AL, Y):
         m = Y.shape[1]
 
+        assert(m > 0)
+
+        # Prevents infinite log
+        AL[AL == 0.] = 0.001
+        AL[AL == 1.] = 0.999
+
         # Compute loss from aL and y.
         cost = (1. / m) * (-np.dot(Y, np.log(AL).T) - np.dot(1 - Y, np.log(1 - AL).T))
 
@@ -186,7 +198,7 @@ class DeepNeuralNetwork:
         linear_cache, activation_cache = cache
 
         if activation == "relu":
-            dZ = self.relu_derivative(dA, activation_cache)
+            dZ = self.leaky_relu_derivative(dA, activation_cache)
             dA_prev, dW, db = self.linear_backward(dZ, linear_cache)
 
         elif activation == "sigmoid":

@@ -1,7 +1,6 @@
 from models.DeepNeuralNetwork import DeepNeuralNetwork
 from utils.util import load_mnist_dataset, preprocess_dataset, split_dataset, encode, get_accuracy
 
-
 if __name__ == "__main__":
     print("\n\tDeep Neural Network")
 
@@ -12,8 +11,8 @@ if __name__ == "__main__":
     X, y = preprocess_dataset(X, y)
 
     print("  - Splitting Dataset")
-    train_size = 5000
-    test_size = 500
+    train_size = 6000
+    test_size = 1000
 
     X_train, y_train, X_test, y_test = split_dataset(X, y, train_size, test_size)
 
@@ -38,17 +37,26 @@ if __name__ == "__main__":
 
     print("\n- Model")
     print("  - Configuring Hyperparameters")
-    layers_dims = [n_x, 49, 9, 7, n_y]
+    layers_dims = [n_x, 98, 7, n_y]
     learning_rate = 0.008
-    iterations = 2500
+    iterations = 3000
 
     dnn = DeepNeuralNetwork(layers_dims, n_x, n_y, learning_rate, iterations)
 
-    print("  - Training Model")
-    dnn.fit(X_train.T, y_train.T, print_cost=False)
+    train = True
+    if train:
+        print("  - Training Model")
+        dnn.fit(X_train.T, y_train.T, print_cost=False)
+    else:
+        print("  - Loading Model Weights from local cache")
+        dnn.load_params()
 
-    print("\n  - Results")
+    print("  - Results")
+    if train:
+        predictions = dnn.predict(X_train.T)
+        acc = get_accuracy(predictions, y_train)
+        print("    - Training Accuracy: " + str(acc) + "%")
+
     predictions = dnn.predict(X_test.T)
     acc = get_accuracy(predictions, y_test)
-
-    print("    - Model Accuracy: "+str(acc)+"%")
+    print("    - Test Accuracy: "+str(acc)+"%")
