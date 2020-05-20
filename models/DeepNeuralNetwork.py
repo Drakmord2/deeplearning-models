@@ -27,7 +27,7 @@ class DeepNeuralNetwork:
         parameters = self.initialize_parameters(self.layers_dims)
 
         # Loop (gradient descent)
-        for i in tqdm(range(0, self.num_iterations), desc="𝛼 = "+str(self.learning_rate)):
+        for i in tqdm(range(0, self.num_iterations)):
 
             # Forward propagation
             AL, caches = self.forward_propagation(X, parameters)
