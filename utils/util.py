@@ -50,13 +50,3 @@ def split_dataset(X, y, train_size, test_size):
     X_test = scaler.transform(X_test)
 
     return X_train, y_train, X_test, y_test
-
-
-def get_accuracy(predictions, labels):
-    acc = predictions.T - labels
-    acc = np.sum(acc, axis=1, keepdims=True)
-
-    acc = acc[acc == 0]
-    acc = acc.shape[0] / labels.shape[0] * 100
-
-    return acc
