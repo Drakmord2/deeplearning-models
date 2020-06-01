@@ -45,8 +45,9 @@ class MNIST:
             print("\n- Model")
             print("  - Configuring Hyperparameters")
             layers_dims = [self.num_inputs, 300, self.num_outputs]
-            learning_rate = 0.0078
-            iterations = 33
+            learning_rate = 0.00078
+            iterations = 150
+            print("    - Layers: {} | Learning Rate: {} | Iterations: {}".format(layers_dims, learning_rate, iterations))
 
             dnn = DeepNeuralNetwork(layers_dims, self.num_inputs, self.num_outputs, learning_rate, iterations)
 

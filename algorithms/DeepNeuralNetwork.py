@@ -5,6 +5,7 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 import numpy as np
 import math
+from scipy.special import expit
 
 plt.rcParams['image.interpolation'] = 'nearest'
 plt.rcParams['image.cmap'] = 'gray'
@@ -83,12 +84,14 @@ class DeepNeuralNetwork:
 
         v, s = self.initialize_adam(parameters)
 
+        seed = 0
         m = X.shape[1]
         mini_batch_size = 256
         t = 0  # initializing the counter required for Adam update
 
         for i in tqdm(range(0, self.num_iterations)):
-            minibatches = self.random_mini_batches(X, Y, mini_batch_size)
+            minibatches = self.random_mini_batches(X, Y, mini_batch_size, seed)
+            seed += 1
             cost_total = 0
 
             for minibatch in minibatches:
@@ -100,13 +103,13 @@ class DeepNeuralNetwork:
                 AL, caches = self.forward_propagation(minibatch_X, parameters)
 
                 # Compute cost and add to the cost total
-                cost_total += self.compute_cost(AL, minibatch_Y)
+                cost_total += self.compute_cost_optimized(AL, minibatch_Y)
 
                 # Backward propagation
                 grads = self.backpropagation(AL, minibatch_Y, caches)
 
                 # Update parameters
-                t = t + 1  # Adam counter
+                t += 1  # Adam counter
                 parameters, v, s = self.update_parameters_with_adam(parameters, grads, v, s, t)
 
             cost_avg = cost_total / m
@@ -118,12 +121,12 @@ class DeepNeuralNetwork:
 
         return parameters, costs
 
-    def random_mini_batches(self, X, Y, mini_batch_size=64):
+    def random_mini_batches(self, X, Y, mini_batch_size=64, seed=0):
         m = X.shape[1]
         n_y = Y.shape[0]
         mini_batches = []
 
-        np.random.seed(0)
+        np.random.seed(seed)
         permutation = list(np.random.permutation(m))
         shuffled_X = X[:, permutation]
         shuffled_Y = Y[:, permutation].reshape((n_y, m))
@@ -221,7 +224,7 @@ class DeepNeuralNetwork:
         return dZ
 
     def sigmoid(self, Z):
-        A = 1 / (1 + np.exp(-Z))
+        A = expit(Z)
         cache = Z
 
         return A, cache
@@ -229,7 +232,7 @@ class DeepNeuralNetwork:
     def sigmoid_derivative(self, dA, cache):
         Z = cache
 
-        s = 1 / (1 + np.exp(-Z))
+        s = expit(Z)
         dZ = dA * s * (1 - s)
 
         assert (dZ.shape == Z.shape)
@@ -312,6 +315,18 @@ class DeepNeuralNetwork:
 
         return cost
 
+    def compute_cost_optimized(self, AL, Y):
+
+        # Prevents infinite log
+        AL[AL == 0.] = 0.001
+        AL[AL == 1.] = 0.999
+
+        # Compute loss from aL and y.
+        logprobs = np.multiply(-np.log(AL), Y) + np.multiply(-np.log(1 - AL), 1 - Y)
+        cost_total = np.sum(logprobs)
+
+        return cost_total
+
     def linear_backward(self, dZ, cache):
         A_prev, W, b = cache
         m = A_prev.shape[1]
@@ -370,14 +385,15 @@ class DeepNeuralNetwork:
         return parameters
 
     def plot_cost(self):
-        plt.plot(self.costs)
+        costs = np.array(self.costs)
+        plt.plot(costs)
         plt.ylabel('Cost')
         plt.xlabel('Epochs')
         plt.show()
 
     def get_accuracy(self, predictions, labels):
         acc = predictions.T - labels
-        acc = np.mean(acc, axis=1, keepdims=True)
+        acc = np.sum(acc, axis=1, keepdims=True)
 
         acc = acc[acc == 0]
         acc = acc.shape[0] / labels.shape[0] * 100
