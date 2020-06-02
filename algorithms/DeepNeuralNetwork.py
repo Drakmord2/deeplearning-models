@@ -389,6 +389,7 @@ class DeepNeuralNetwork:
         plt.plot(costs)
         plt.ylabel('Cost')
         plt.xlabel('Epochs')
+        plt.title("Learning Rate =" + str(self.learning_rate))
         plt.show()
 
     def get_accuracy(self, predictions, labels):

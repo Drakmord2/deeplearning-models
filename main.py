@@ -4,7 +4,7 @@ if __name__ == "__main__":
     try:
         mnist = MNIST(num_examples=10000, train_size=7000)
         
-        model = mnist.get_model("dnn")
+        model = mnist.get_model("tf-dnn")
 
         print("  - Setting runtime options")
         optimizer = "Adam"  # Adam | None
@@ -20,14 +20,12 @@ if __name__ == "__main__":
 
         print("  - Results")
         if train:
-            predictions = model.predict(mnist.X_train.T)
-            acc = model.get_accuracy(predictions, mnist.Y_train)
-            print("    - Training Accuracy: " + str(acc) + "%")
+            # predictions = model.predict(mnist.X_train.T)
+            model.get_accuracy(mnist.X_train.T, mnist.Y_train.T, 'Training')
             model.plot_cost()
 
-        predictions = model.predict(mnist.X_test.T)
-        acc = model.get_accuracy(predictions, mnist.Y_test)
-        print("    - Test Accuracy: " + str(acc) + "%")
+        # predictions = model.predict(mnist.X_test.T)
+        acc = model.get_accuracy(mnist.X_test.T, mnist.Y_test.T, 'Test')
 
     except KeyboardInterrupt:
         print("\n- Interrupted\n")

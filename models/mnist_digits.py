@@ -1,4 +1,5 @@
 from algorithms.DeepNeuralNetwork import DeepNeuralNetwork
+from algorithms.TensorflowDNN import TensorflowDNN
 from utils.util import load_mnist_dataset, preprocess_dataset, split_dataset, encode
 
 
@@ -54,4 +55,17 @@ class MNIST:
             return dnn
 
         if model == "tf-dnn":
-            raise NotImplementedError()
+            print("\n\tTensorFlow Deep Neural Network")
+
+            print("\n- Model")
+            print("  - Configuring Hyperparameters")
+            layers_dims = [self.num_inputs, 300, self.num_outputs]
+            learning_rate = 0.00002
+            iterations = 150
+            print("    - Layers: {} | Learning Rate: {} | Iterations: {} | Examples: {}".format(layers_dims, learning_rate, iterations, self.X_train.shape[0]))
+
+            tfdnn = TensorflowDNN(layers_dims, self.num_inputs, self.num_outputs, learning_rate, iterations)
+
+            return tfdnn
+
+        raise NotImplementedError()
