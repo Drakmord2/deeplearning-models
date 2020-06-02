@@ -2,12 +2,12 @@ from models.mnist_digits import MNIST
 
 if __name__ == "__main__":
     try:
-        mnist = MNIST(num_examples=7000, train_size=5000)
+        mnist = MNIST(num_examples=10000, train_size=7000)
         
         model = mnist.get_model("dnn")
 
         print("  - Setting runtime options")
-        optimizer = "adam"  # adam | None
+        optimizer = "Adam"  # Adam | None
         print("    - Optimizer: ", optimizer)
         train = True
         
