@@ -20,12 +20,10 @@ if __name__ == "__main__":
 
         print("  - Results")
         if train:
-            # predictions = model.predict(mnist.X_train.T)
-            model.get_accuracy(mnist.X_train.T, mnist.Y_train.T, 'Training')
+            model.get_accuracy(mnist.X_train, mnist.Y_train, 'Training')
             model.plot_cost()
 
-        # predictions = model.predict(mnist.X_test.T)
-        acc = model.get_accuracy(mnist.X_test.T, mnist.Y_test.T, 'Test')
+        model.get_accuracy(mnist.X_test, mnist.Y_test, 'Test')
 
     except KeyboardInterrupt:
         print("\n- Interrupted\n")

@@ -201,6 +201,9 @@ class TensorflowDNN:
     def get_accuracy(self, X_pred, Y_pred, type=''):
         X, Y = self.create_placeholders()
 
+        X_pred = X_pred.T
+        Y_pred = Y_pred.T
+
         with tf.Session() as sess:
             # Forward Propagation
             prop = self.forward_propagation(X, self.parameters)

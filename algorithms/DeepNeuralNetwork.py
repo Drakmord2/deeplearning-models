@@ -393,11 +393,13 @@ class DeepNeuralNetwork:
         plt.title("Learning Rate =" + str(self.learning_rate))
         plt.show()
 
-    def get_accuracy(self, predictions, labels):
+    def get_accuracy(self, X_pred, labels, type=''):
+        predictions = self.predict(X_pred.T)
+
         acc = predictions.T - labels
         acc = np.sum(acc, axis=1, keepdims=True)
 
         acc = acc[acc == 0]
         acc = acc.shape[0] / labels.shape[0] * 100
 
-        return acc
+        print('    -', type, "Accuracy:", acc, '%')
