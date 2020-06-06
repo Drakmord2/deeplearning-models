@@ -36,9 +36,7 @@ class TensorflowDNN:
         X, Y = self.create_placeholders()
 
         # Initialize parameters
-        # weights_shape = [[25, 12288], [25, 1], [12, 25], [12, 1], [6, 12], [6, 1]]
-        weights_shape = [[300, 784], [300, 1], [10, 300], [10, 1]]
-        parameters = self.initialize_parameters(weights_shape)
+        parameters = self.initialize_parameters()
 
         # Forward propagation: Build the forward propagation in the tensorflow graph
         ZL = self.forward_propagation(X, parameters)
@@ -78,6 +76,7 @@ class TensorflowDNN:
 
             self.costs = costs
             self.parameters = sess.run(parameters)
+            np.save("./outputs/tf-dnn-params.npy", self.parameters)
 
     def predict(self, X_pred):
         m = X_pred.shape[1]
@@ -100,6 +99,11 @@ class TensorflowDNN:
 
         return p
 
+    def load_params(self):
+        path = "./outputs/tf-dnn-params.npy"
+        parameters = np.load(path, allow_pickle=True)
+
+        self.parameters = parameters.item()
 
     def create_placeholders(self):
         X = tf.placeholder(shape=(self.n_x, None), dtype=tf.float32, name='X')
@@ -107,11 +111,17 @@ class TensorflowDNN:
 
         return X, Y
 
-    def initialize_parameters(self, weights_shape):
+    def initialize_parameters(self):
+        weights_shape = []
+        for l in range(len(self.layers_dims) - 1):
+            w = [self.layers_dims[l+1], self.layers_dims[l]]
+            b = [self.layers_dims[l+1], 1]
+            weights_shape.append(w)
+            weights_shape.append(b)
+
         L = len(weights_shape) // 2
 
         parameters = {}
-
         weight_idx = 0
         for l in range(0, L):
             w_label = 'W' + str(l + 1)

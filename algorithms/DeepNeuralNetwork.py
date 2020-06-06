@@ -200,7 +200,8 @@ class DeepNeuralNetwork:
         return parameters, v, s
 
     def load_params(self):
-        parameters = np.load("./outputs/dnn-params.npy", allow_pickle=True)
+        path = "./outputs/dnn-params.npy"
+        parameters = np.load(path, allow_pickle=True)
 
         self.parameters = parameters.item()
 
