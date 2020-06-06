@@ -1,4 +1,6 @@
 # DeepLearning Models
+This repository is a collection of [Deep Learning](https://en.wikipedia.org/wiki/Deep_learning) models implemented with knowlegde from
+DeepLearning.ai Specialization on [Coursera](https://www.coursera.org/specializations/deep-learning).
 
 ## Algorithms
 ### Deep Neural Network
@@ -32,12 +34,15 @@ The main public methods of the models are:
 
 ## Datasets
 The included utility functions can fetch datasets from OpenML. The default dataset is:
+
 ### MNIST 
 The [MNIST database](https://en.wikipedia.org/wiki/MNIST_database) is a large database of handwritten digits that contain 70,000 images. 
 
 ## Setup
 
-Global requirements are Python 3.6+ and [Virtualenv](https://virtualenv.pypa.io/en/latest/)
+Global requirements are Python 3.6+ and [Virtualenv](https://virtualenv.pypa.io/en/latest/). 
+
+Configure the system by executing the following commands on the project's root folder:
 
 ```
 virtualenv venv
@@ -45,4 +50,4 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Then the is available through `python main.py`
+When inside the virtual environment, the code can be run using `python main.py`
