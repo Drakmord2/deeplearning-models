@@ -28,7 +28,7 @@ def copy_model_parameters(from_scope, to_scope):
 
 
 class NeuralModel:
-    def __init__(self, layers, name_scope='simple_neural_network'):
+    def __init__(self, layers, name_scope='neural_network'):
         self.num_inputs = layers[0]
         self.layers = layers
         self.num_outputs = layers[-1]

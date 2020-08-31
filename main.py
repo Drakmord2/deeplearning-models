@@ -2,12 +2,12 @@ from models.mnist_digits import MNIST
 from algorithms.LufficcDQN import DQN
 
 
-def run_mnist():
+def run_mnist(model_type):
     print("\n\t - MNIST -")
 
     mnist = MNIST(num_examples=70000, train_size=60000)
 
-    model = mnist.get_model("tf-dnn")
+    model = mnist.get_model(model_type)
 
     print("  - Setting runtime options")
     optimizer = "Adam"
@@ -52,7 +52,20 @@ def run_openai():
 
 if __name__ == "__main__":
     try:
-        run_openai()
+        print("\n\t - Deep Leaning Models -")
+        print("\n- Available Models:")
+        print("  1 - Numpy Deep Neural Network\t\t (MNIST)")
+        print("  2 - Tensorflow Deep Neural Network\t (MNIST)")
+        print("  3 - Tensorflow Deep Q Network\t\t (OpenAI Cartpole)")
+
+        option = input("\nSelected Model: ")
+
+        if option == '1':
+            run_mnist('dnn')
+        if option == '2':
+            run_mnist('tf-dnn')
+        if option == '3':
+            run_openai()
 
     except KeyboardInterrupt:
         print("\n- Interrupted\n")
