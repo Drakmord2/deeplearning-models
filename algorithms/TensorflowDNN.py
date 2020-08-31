@@ -25,7 +25,7 @@ class TensorflowDNN:
         self.parameters = []
         self.costs = []
 
-    def fit(self, X_train, Y_train, optimizer='Adam', print_cost=False):
+    def fit(self, X_train, Y_train, optimizer='adam', print_cost=False):
         ops.reset_default_graph()
         tf.set_random_seed(1)
         seed = 3

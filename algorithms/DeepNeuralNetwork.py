@@ -24,11 +24,11 @@ class DeepNeuralNetwork:
         self.parameters = []
         self.costs = []
 
-    def fit(self, X, Y, optimizer="Adam", print_cost=False):
+    def fit(self, X, Y, optimizer="adam", print_cost=False):
         # Parameters initialization.
         parameters = self.initialize_parameters(self.layers_dims)
 
-        if optimizer == "Adam":
+        if optimizer == "adam":
             parameters, costs = self.optimized_training(X, Y, parameters, print_cost)
         else:
             parameters, costs = self.training(X, Y, parameters, print_cost)

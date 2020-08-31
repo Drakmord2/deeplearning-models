@@ -20,10 +20,24 @@ Implemented with TensorFlow 1
 
 Xavier initialization for network weights, Adam optimization and mini-batch.
 
+### Keras Convolutional Network
+Implemented with Keras 2
+
+Convolutional Layer:
+- Zero Padding
+- Batch Normalization
+- ReLU Activation
+- Max Pooling
+
+Dense layer:
+- Flatten
+- Softmax
+
 ### TensorFlow Deep Q Network
 Reinforcement Learning heavily based on [lufficc/dqn](https://github.com/lufficc/dqn).
 
 Intended to be used as an agent on OpenAI Gym.
+
 
 ## Models
 The constructor of the models receive:

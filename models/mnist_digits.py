@@ -1,10 +1,11 @@
 from algorithms.DeepNeuralNetwork import DeepNeuralNetwork
 from algorithms.TensorflowDNN import TensorflowDNN
+from algorithms.KerasCNN import KerasCNN
 from utils.util import load_mnist_dataset, preprocess_dataset, split_dataset, encode
 
 
 class MNIST:
-    def __init__(self, num_examples, train_size):
+    def __init__(self, num_examples, train_size, model_type):
         print("\n-Dataset")
         X, Y = load_mnist_dataset(num_examples=num_examples)
 
@@ -19,6 +20,11 @@ class MNIST:
         self.num_inputs = self.X_train.shape[1]
         self.num_outputs = 10
         self.encode_labels()
+
+        if model_type == 'tf-cnn':
+            self.X_train = self.X_train.reshape((self.X_train.shape[0], 28, 28, 1))
+            self.X_test = self.X_test.reshape((self.X_test.shape[0], 28, 28, 1))
+            self.num_inputs = self.X_train.shape[1:]
 
     def encode_labels(self):
         print("  - Encoding labels")
@@ -67,5 +73,17 @@ class MNIST:
             tfdnn = TensorflowDNN(layers_dims, self.num_inputs, self.num_outputs, learning_rate, iterations)
 
             return tfdnn
+
+        if model == "tf-cnn":
+            print("\n\tTensorFlow Convolutional Neural Network")
+
+            print("\n- Model")
+            print("  - Configuring Hyperparameters")
+            iterations = 3
+            print("    - Iterations: {} | Examples: {}".format(iterations, self.X_train.shape[0]))
+
+            tfcnn = KerasCNN(self.num_inputs, iterations)
+
+            return tfcnn
 
         raise NotImplementedError()

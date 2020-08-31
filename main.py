@@ -5,14 +5,14 @@ from algorithms.LufficcDQN import DQN
 def run_mnist(model_type):
     print("\n\t - MNIST -")
 
-    mnist = MNIST(num_examples=70000, train_size=60000)
+    mnist = MNIST(num_examples=70000, train_size=60000, model_type=model_type)
 
     model = mnist.get_model(model_type)
 
     print("  - Setting runtime options")
-    optimizer = "Adam"
+    optimizer = "adam"
     print("    - Optimizer: ", optimizer)
-    train = True
+    train = False
 
     if train:
         print("  - Training Model")
@@ -56,7 +56,8 @@ if __name__ == "__main__":
         print("\n- Available Models:")
         print("  1 - Numpy Deep Neural Network\t\t (MNIST)")
         print("  2 - Tensorflow Deep Neural Network\t (MNIST)")
-        print("  3 - Tensorflow Deep Q Network\t\t (OpenAI Cartpole)")
+        print("  3 - Keras Convolutional Neural Network (MNIST)")
+        print("  4 - Tensorflow Deep Q Network\t\t (OpenAI Cartpole)")
 
         option = input("\nSelected Model: ")
 
@@ -65,6 +66,8 @@ if __name__ == "__main__":
         if option == '2':
             run_mnist('tf-dnn')
         if option == '3':
+            run_mnist('tf-cnn')
+        if option == '4':
             run_openai()
 
     except KeyboardInterrupt:
