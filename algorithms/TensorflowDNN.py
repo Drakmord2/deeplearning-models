@@ -70,7 +70,7 @@ class TensorflowDNN:
                     epoch_cost += minibatch_cost / minibatch_size
 
                 # Print the cost every epoch
-                if print_cost == True and epoch % 100 == 0:
+                if print_cost is True and epoch % 100 == 0:
                     print("Cost after epoch %i: %f" % (epoch, epoch_cost))
                 costs.append(epoch_cost)
 
