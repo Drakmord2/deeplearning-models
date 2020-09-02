@@ -145,7 +145,8 @@ class TensorflowDNN:
             linears['Z' + str(l + 1)] = tf.matmul(parameters['W' + str(l + 1)], activations['A' + str(l)]) + parameters['b' + str(l + 1)]
 
             if l + 1 != L:
-                activations['A' + str(l + 1)] = tf.nn.relu(linears['Z' + str(l + 1)])
+                z = linears['Z' + str(l + 1)]
+                activations['A' + str(l + 1)] = z * tf.math.tanh(tf.math.softplus(z))
 
         return linears['Z' + str(L)]
 

@@ -79,7 +79,7 @@ class MNIST:
 
             print("\n- Model")
             print("  - Configuring Hyperparameters")
-            iterations = 3
+            iterations = 5
             print("    - Iterations: {} | Examples: {}".format(iterations, self.X_train.shape[0]))
 
             tfcnn = KerasCNN(self.num_inputs, iterations)

@@ -20,6 +20,10 @@ Implemented with TensorFlow 1
 
 Xavier initialization for network weights, Adam optimization and mini-batch.
 
+Activation Functions:
+- Hidden layers : Mish
+- Output layer: Softmax
+
 ### Keras Convolutional Network
 Implemented with Keras 2
 

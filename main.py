@@ -12,7 +12,7 @@ def run_mnist(model_type):
     print("  - Setting runtime options")
     optimizer = "adam"
     print("    - Optimizer: ", optimizer)
-    train = False
+    train = True
 
     if train:
         print("  - Training Model")
